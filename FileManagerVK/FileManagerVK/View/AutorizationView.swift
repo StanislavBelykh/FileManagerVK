@@ -11,7 +11,7 @@ import UIKit
 class AutorizationView: UIView {
     
     weak var delegate: AutorizationViewDelegate?
-    
+    //MARK: - UI
     let logoView: UIImageView = {
         let logoView = UIImageView()
         logoView.image = UIImage(named: "Logo")
@@ -45,10 +45,10 @@ class AutorizationView: UIView {
         return loginButton
     }()
     
+    //MARK: - LiveCycle
     init() {
         super.init(frame: .zero)
         backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        
         addSubview(logoView)
         addSubview(titleLabel)
         addSubview(loginButton)
@@ -66,22 +66,18 @@ class AutorizationView: UIView {
             loginButton.widthAnchor.constraint(equalToConstant: 200),
         ])
     }
-    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func moveToAuth(){
-        delegate?.moveToRegistrationWebView()
-    }
-    @objc func touchLoginButton() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .autoreverse, animations: {
-            self.loginButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        }, completion: { _ in
-            self.loginButton.transform = .identity
-        })
-    }
+    //MARK: - Animation
     func animateTitleLabel() {
         
         UIView.transition(with: titleLabel,
@@ -94,7 +90,22 @@ class AutorizationView: UIView {
         })
     }
 }
+    //MARK: - Private Func
+private extension AutorizationView {
+    @objc func moveToAuth(){
+        delegate?.moveToRegistrationWebView()
+    }
+    
+    @objc func touchLoginButton() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .autoreverse, animations: {
+            self.loginButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        }, completion: { _ in
+            self.loginButton.transform = .identity
+        })
+    }
+}
 
+    //MARK: - Delegate
 protocol AutorizationViewDelegate: class {
     func moveToRegistrationWebView()
 }

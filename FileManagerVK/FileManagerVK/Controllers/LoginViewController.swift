@@ -10,12 +10,15 @@ import UIKit
 
 class LoginViewController: UIViewController, AutorizationViewDelegate {
 
+    let autorizationView = AutorizationView()
+    
+    //MARK: - Live Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view = AutorizationView()
-        
-        view().delegate = self
+        view = autorizationView
         title = "Выйти"
+        
+        autorizationView.delegate = self
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -24,16 +27,11 @@ class LoginViewController: UIViewController, AutorizationViewDelegate {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        view().animateTitleLabel()
+        autorizationView.animateTitleLabel()
     }
     
     func moveToRegistrationWebView() {
-        let toViewController = HomeViewController()
+        let toViewController = VKWebViewController()
         navigationController?.pushViewController(toViewController, animated: true)
     }
-    
-    func view() -> AutorizationView {
-        return self.view as! AutorizationView
-    }
-
 }

@@ -26,12 +26,11 @@ class TableHeaderView: UIView {
         super.init(frame: frame)
         backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
         addSubview(sortButton)
+        
         NSLayoutConstraint.activate([
             sortButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             sortButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             sortButton.widthAnchor.constraint(equalToConstant: 200)
-            
-            
         ])
         
     }

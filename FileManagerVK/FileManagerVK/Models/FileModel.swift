@@ -8,7 +8,23 @@
 
 import Foundation
 
-enum TypeFile: Int {
+struct FileModel: Codable {
+    let  date: Double
+    let  ext: String
+    let  id: Int
+    let  ownerID: Int
+    let  size: Int
+    let  title: String
+    let  type: TypeFile
+    let  url: String
+    let  preview: Preview?
+
+    enum CodingKeys: String, CodingKey {
+        case date, ext, id, ownerID = "owner_id", size, title, type, url, preview
+    }
+}
+
+enum TypeFile: Int, Codable {
     case textDocument = 1
     case archiv = 2
     case gif = 3
@@ -16,58 +32,55 @@ enum TypeFile: Int {
     case audio = 5
     case video = 6
     case book = 7
-    case Uncknow = 8
+    case unknown = 8
+    
+}
+extension TypeFile {
     
     func getName() -> String {
-        switch self.rawValue {
-        case 1 :
+        switch self {
+        case .textDocument :
             return "Text Document" //— текстовые документы;
-        case 2 :
+        case .archiv :
             return "Archiv"        //— архивы;
-        case 3 :
+        case .gif :
             return "Gif"           //— gif;
-        case 4 :
+        case .image :
             return "Image"         //— изображения;
-        case 5 :
+        case .audio :
             return "Audio"         //— аудио;
-        case 6 :
+        case .video :
             return "Video"         //— видео;
-        case 7 :
+        case .book :
             return "Book"          //— электронные книги;
         default:
-            return "Uncknow"       //— неизвестно.
+            return "Unknown"       //— неизвестно.
+        }
+    }
+    func  getIconName() -> String {
+        switch self {
+        case .textDocument :
+            return "text" //— текстовые документы;
+        case .archiv :
+            return "archiv"        //— архивы;
+        case .gif :
+            return "video"           //— gif;
+        case .image :
+            return "image"         //— изображения;
+        case .audio :
+            return "music"         //— аудио;
+        case .video :
+            return "video"         //— видео;
+        case .book :
+            return "text"          //— электронные книги;
+        default:
+            return "file"       //— неизвестно.
         }
     }
 }
 
-struct FileModel {
-    let id: String
-    let owner_id: Int
-    let title: String
-    let size: Int
-    let ext: String
-    let url: String
-    let date: Date
-    let type: TypeFile
-    let preview: Preview
-    
-}
-struct  Preview {
-    let photo: Size
-}
-struct Size {
-    let sizeS: String
-    let sizeM: String
-    let sizeL: String
-}
-//id": 437608344,
-//"owner_id": -37273781,
-//"title": "test",
-//"size": 136266,
-//"ext": "png",
-//"url": "https://vk.com/do...2118df3d1&api=1",
-//"date": 1467272719,
-//"type": 4,
-//"preview": {
-//          "photo": {
-//                      "sizes":
+
+
+
+
+

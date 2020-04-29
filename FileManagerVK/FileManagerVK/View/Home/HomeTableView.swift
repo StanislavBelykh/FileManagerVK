@@ -9,8 +9,6 @@
 import UIKit
 
 class HomeTableView: UITableView {
-    
-    let searchBar = UISearchBar()
     let header = TableHeaderView(frame: .init(x: 0, y: 0, width: 0, height: 50))
     
     init(){
@@ -19,8 +17,10 @@ class HomeTableView: UITableView {
         separatorColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
         
         //Cell
-        register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.reusedID)
-        
+        register(FileTableViewCell.self, forCellReuseIdentifier: FileTableViewCell.reusedID)
+        rowHeight = 56
+        estimatedRowHeight = UITableView.automaticDimension
+        translatesAutoresizingMaskIntoConstraints = false
         //Header
         tableHeaderView?.isHidden = false
         tableHeaderView = header
