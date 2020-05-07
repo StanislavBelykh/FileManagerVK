@@ -124,4 +124,31 @@ class NetworkingService {
         }
         task.resume()
     }
+    //Сделать с флагом вызывает юзер или проверка есть ли файл
+    func downloadFile(_ file: FileModel, isUserInitiated: Bool, completion: @escaping (_ success: Bool,_ filrLocation: URL?) -> Void){
+        
+        let fileURL = URL(string: file.url)
+        
+        let documentDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        
+        let destinationURL = documentDirectoryURL.appendingPathComponent("\(file.id)" + "." + "\(file.ext)" )
+        
+        if FileManager.default.fileExists(atPath: destinationURL.path){
+                debugPrint("Файл уже был загружен")
+                completion(true, destinationURL) 
+        } else if isUserInitiated{
+            URLSession.shared.downloadTask(with: fileURL!, completionHandler: { (location, response, error) -> Void in
+                guard let tempLocation = location, error == nil else { return }
+                do {
+                    try FileManager.default.moveItem(at: tempLocation, to: destinationURL)
+                        completion(true, destinationURL)
+                        print("Файл загружен")
+                } catch let error as NSError {
+                    print(error.localizedDescription)
+                    completion(false,nil)
+                }
+            }).resume()
+        }
+    }
+    
 }

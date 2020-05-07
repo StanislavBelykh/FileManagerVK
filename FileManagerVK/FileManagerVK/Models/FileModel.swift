@@ -9,21 +9,23 @@
 import Foundation
 
 struct FileModel: Codable {
-    let  date: Double
-    let  ext: String
-    let  id: Int
-    let  ownerID: Int
-    let  size: Int
-    let  title: String
-    let  type: TypeFile
-    let  url: String
-    let  preview: Preview?
+    let date: Double
+    let ext: String
+    let id: Int
+    let ownerID: Int
+    let size: Int
+    let title: String
+    let type: TypeFile
+    let url: String
+    let preview: Preview?
+    var destinationURL: URL?
+    var state: StateFile?
 
     enum CodingKeys: String, CodingKey {
         case date, ext, id, ownerID = "owner_id", size, title, type, url, preview
     }
 }
-
+// MARK: - TypeFile
 enum TypeFile: Int, Codable {
     case textDocument = 1
     case archiv = 2
@@ -79,6 +81,9 @@ extension TypeFile {
     }
 }
 
+enum StateFile {
+    case inCloud, loading, loaded
+}
 
 
 

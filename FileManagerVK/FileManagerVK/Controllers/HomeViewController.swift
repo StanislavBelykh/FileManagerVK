@@ -7,12 +7,16 @@
 //
 
 import UIKit
+import QuickLook
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, QLPreviewControllerDelegate {
     
+    var loadFiles = [FileModel]()
     var files = [FileModel]()
     let homeView = HomeTableView()
     let networkingService = NetworkingService()
+    let sortManager = SortManager()
+    var sortBy: TypeSorted = .name
     
     private let searchController = UISearchController(searchResultsController: nil)
     private var searchBarIsEmpty: Bool {
@@ -28,7 +32,7 @@ class HomeViewController: UIViewController {
         title = "Files"
         
         loadData()
-        
+
         homeView.delegate = self
         homeView.dataSource = self
         homeView.header.delegate = self
@@ -46,9 +50,20 @@ class HomeViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = false
     }
+    
     func loadData() {
-        networkingService.loadFiles(onComplete: { [weak self] (files) in
-            self?.files = files
+        networkingService.loadFiles(onComplete: { [weak self] (loadFiles) in
+            self?.loadFiles = loadFiles
+            for i in 0..<loadFiles.count {
+                self?.networkingService.downloadFile(loadFiles[i], isUserInitiated: false, completion: { (isComplete, destinationURL) in
+                    if isComplete{
+                        self?.loadFiles[i].destinationURL = destinationURL
+                        self?.loadFiles[i].state = .loaded
+                    }
+                })
+            }
+            self?.loadFiles = self?.sortManager.sortedFor(files: self?.loadFiles, by: .name) ?? [FileModel]()
+            self?.files = self?.loadFiles ?? [FileModel]()
             self?.homeView.reloadData()
         }) { (error) in
             print(error)
@@ -136,8 +151,21 @@ extension HomeViewController: UITableViewDelegate {
         return action
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard self.files[indexPath.row].destinationURL != nil else {
+            return
+        }
+        //Попробовать через ReloadData
+        let quickLookController = QLPreviewController()
+        quickLookController.delegate = self
+        quickLookController.dataSource = self
+        quickLookController.currentPreviewItemIndex = indexPath.row
+        self.navigationController?.pushViewController(quickLookController, animated: true)
+        
+    }
+    
 }
-// MARK: -DataSourse
+// MARK: - DataSourse
 extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return files.count
@@ -146,17 +174,58 @@ extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = homeView.dequeueReusableCell(withIdentifier: FileTableViewCell.reusedID, for: indexPath) as! FileTableViewCell
         let file = files[indexPath.row]
+        cell.index = indexPath.row
+        cell.delegate = self
         cell.configureCell(for: file)
         return cell
     }
 }
-// MARK: -SearchResultsUpdating
+// MARK: - SearchResultsUpdating
 extension HomeViewController: UISearchResultsUpdating{
     func updateSearchResults(for searchController: UISearchController) {
-        
+        if !searchBarIsEmpty{
+            files = sortManager.filtredFor(files: loadFiles, searchText: searchController.searchBar.text!) ?? [FileModel]()     
+        } else {
+            files = loadFiles
+        }
+        homeView.reloadData()
     }
 }
-// MARK: -HeaderControlsDelegate
+// MARK: - QLPreviewControllerDataSource
+extension HomeViewController: QLPreviewControllerDataSource {
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        files.count
+    }
+    
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        if let previewItem = files[index].destinationURL {
+            return previewItem as QLPreviewItem
+        }
+        return NSURL(string: Bundle.main.resourcePath ?? "" + "/file") ?? NSURL() as QLPreviewItem
+    }
+}
+// MARK: - HomeTableViewCellDelegate
+extension HomeViewController: HomeTableViewCellDelegate {
+    func loadFile(indexCell: Int) {
+        print("Нажата кнопка загрузки")
+        let cell = homeView.cellForRow(at: IndexPath(row: indexCell, section: 0)) as! FileTableViewCell
+        
+        files[indexCell].state = .loading
+        cell.setImageLoadButton(for: files[indexCell])
+       
+        self.networkingService.downloadFile(files[indexCell], isUserInitiated: true) { (isComplete, destinationURL) in
+            if isComplete {
+                guard destinationURL != nil else {
+                    return
+                }
+                self.files[indexCell].destinationURL = destinationURL
+                self.files[indexCell].state = .loaded
+                cell.setImageLoadButton(for: self.files[indexCell])
+            }
+        }
+    }
+}
+// MARK: - HeaderControlsDelegate
 extension HomeViewController: TableHeaderControlsDelegate{
     func selectSort() {
         let sortAlert = UIAlertController(title: "Сортировка по:", message: nil, preferredStyle: .actionSheet)
@@ -165,12 +234,21 @@ extension HomeViewController: TableHeaderControlsDelegate{
         
         sortAlert.addAction(UIAlertAction(title: "Имя", style: .default, handler: { _ in
             self.homeView.header.sortButton.setTitle("Сортировка по имени", for: .normal)
+            self.files = self.sortManager.sortedFor(files: self.files, by: .name) ?? [FileModel]()
+            self.loadFiles = self.sortManager.sortedFor(files: self.loadFiles, by: .name) ?? [FileModel]()
+            self.homeView.reloadData()
         }))
         sortAlert.addAction(UIAlertAction(title: "Дата", style: .default, handler: { _ in
             self.homeView.header.sortButton.setTitle("Сортировка по дате", for: .normal)
+            self.files = self.sortManager.sortedFor(files: self.files, by: .date) ?? [FileModel]()
+            self.loadFiles = self.sortManager.sortedFor(files: self.loadFiles, by: .date) ?? [FileModel]()
+            self.homeView.reloadData()
         }))
         sortAlert.addAction(UIAlertAction(title: "Тип", style: .default, handler: { _ in
             self.homeView.header.sortButton.setTitle("Сортировка по типу", for: .normal)
+            self.files = self.sortManager.sortedFor(files: self.files, by: .type) ?? [FileModel]()
+            self.loadFiles = self.sortManager.sortedFor(files: self.loadFiles, by: .type) ?? [FileModel]()
+            self.homeView.reloadData()
         }))
         sortAlert.pruneNegativeWidthConstraints()
         

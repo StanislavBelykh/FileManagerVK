@@ -18,6 +18,7 @@ class FileTableViewCell: UITableViewCell {
     }()
     
     weak var delegate: HomeTableViewCellDelegate?
+    var index: Int?
     
     let imageFile: UIImageView = {
         let imageFile = UIImageView()
@@ -46,16 +47,6 @@ class FileTableViewCell: UITableViewCell {
         loadButton.translatesAutoresizingMaskIntoConstraints = false
         loadButton.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         loadButton.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        if #available(iOS 13.0, *) {
-            loadButton.setImage(UIImage(systemName: "capslock.fill"), for: .normal)
-        } else {
-            loadButton.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-            loadButton.layer.cornerRadius = 10
-            loadButton.layer.masksToBounds = true
-            // Fallback on earlier versions
-        }
-        loadButton.addTarget(self, action: #selector(loadFile), for: .touchUpInside)
-        loadButton.addTarget(self, action: #selector(changeState), for: .touchDown)
         return loadButton
     }()
 
@@ -102,25 +93,76 @@ class FileTableViewCell: UITableViewCell {
         let date = Date(timeIntervalSince1970: file.date)
         let dateString = FileTableViewCell.dateFormatter.string(from: date)
         
+        loadButton.addTarget(self, action: #selector(changeState), for: .touchDown)
+        loadButton.addTarget(self, action: #selector(loadFile), for: .touchUpInside)
+        
+        
         self.imageFile.image = UIImage(named: "\(file.type.getIconName())")
         self.titleFileLabel.text = file.title
         self.dateFileLabel.text = dateString
+        self.setImageLoadButton(for: file)
+        
     }
     
     @objc func loadFile() {
-        delegate?.loadFile()
+        if let index = index {
+            delegate?.loadFile(indexCell: index)
+        } else {
+            print("File  не доступен")
+        }
     }
-    // Не вызывается
     @objc func changeState(){
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: 0.4, animations: {
             self.loadButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             self.loadButton.tintColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
         }) { _ in
             self.loadButton.transform = .identity
         }
     }
-    
+    func setImageLoadButton(for file: FileModel){
+        DispatchQueue.main.async {
+            switch file.state {
+            case .inCloud:
+                if #available(iOS 13.0, *) {
+                    self.loadButton.setImage(UIImage(systemName: "capslock.fill"), for: .normal)
+                } else {
+                    self.loadButton.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+                    self.loadButton.layer.cornerRadius = 10
+                    self.loadButton.layer.masksToBounds = true
+                    // Fallback on earlier versions
+                }
+            case .loading:
+                self.loadButton.tintColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+                UIView.transition(
+                    with: self.loadButton,
+                    duration: 0.6,
+                    options: [.repeat, .transitionFlipFromLeft],
+                    animations: nil,
+                    completion: nil)
+            case .loaded:
+                self.loadButton.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                self.loadButton.layer.removeAllAnimations()
+                if #available(iOS 13.0, *) {
+                    self.loadButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+                } else {
+                    self.loadButton.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                    self.loadButton.layer.cornerRadius = 10
+                    self.loadButton.layer.masksToBounds = true
+                    // Fallback on earlier versions
+                }
+            default:
+                if #available(iOS 13.0, *) {
+                    self.loadButton.setImage(UIImage(systemName: "capslock.fill"), for: .normal)
+                } else {
+                    self.loadButton.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                    self.loadButton.layer.cornerRadius = 10
+                    self.loadButton.layer.masksToBounds = true
+                    // Fallback on earlier versions
+                }
+            }
+        }
+    }
 }
 protocol HomeTableViewCellDelegate: class {
-    func loadFile()
+    func loadFile(indexCell: Int)
 }

@@ -16,7 +16,7 @@ class VKWebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        navigationController?.navigationBar.isHidden = true
         view = webView
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.navigationDelegate = self
@@ -51,7 +51,6 @@ extension VKWebViewController: WKNavigationDelegate {
       
       let token = params["access_token"]
       Session.shared.token = token!
-      
       if token != nil {
         let toViewController = HomeViewController()
         navigationController?.pushViewController(toViewController, animated: true)
