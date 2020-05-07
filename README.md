@@ -19,4 +19,4 @@
 
 ### Примеры экранов:
 
-<img src="./Screen/Edit.png" width="300" /> <img src="./Screen/Home.png" width="300" /><img src="./Screen/Sort.png" width="300" />
+<img src="./Screen/Edit.png" width="300" /> <img src="./Screen/Home.png" width="300" /> <img src="./Screen/Sort.png" width="300" />
