@@ -15,7 +15,13 @@ enum ServerError: Error {
 }
 
 class NetworkingService {
+    private let sessionApp: SessionApp
+    private let appConfiguration: Configuration
     
+    init(sessionApp: SessionApp, appConfiguration: Configuration){
+        self.sessionApp = sessionApp
+        self.appConfiguration = appConfiguration
+    }
     
     func loadFiles( onComplete: @escaping ([FileModel]) -> Void, onError: @escaping (Error) -> Void){
         let configuration = URLSessionConfiguration.default
@@ -23,16 +29,15 @@ class NetworkingService {
         
         var urlConstructor = URLComponents()
         
-        urlConstructor.scheme = "https"
-        
-        urlConstructor.host = "api.vk.com"
+        urlConstructor.scheme = appConfiguration.scheme
+        urlConstructor.host = appConfiguration.host
         
         urlConstructor.path = "/method/docs.get"
         
         urlConstructor.queryItems = [
             URLQueryItem(name: "count", value: "0"),
             URLQueryItem(name: "type", value: "0"),
-            URLQueryItem(name: "access_token", value: Session.shared.token),
+            URLQueryItem(name: "access_token", value: sessionApp.token),
             URLQueryItem(name: "v", value: "5.103"),
         ]
         
@@ -65,16 +70,15 @@ class NetworkingService {
         
         var urlConstructor = URLComponents()
         
-        urlConstructor.scheme = "https"
-        
-        urlConstructor.host = "api.vk.com"
+        urlConstructor.scheme = appConfiguration.scheme
+        urlConstructor.host = appConfiguration.host
         
         urlConstructor.path = "/method/docs.edit"
         
         urlConstructor.queryItems = [
             URLQueryItem(name: "doc_id", value: "\(id)"),
             URLQueryItem(name: "title", value: "\(name)"),
-            URLQueryItem(name: "access_token", value: Session.shared.token),
+            URLQueryItem(name: "access_token", value: sessionApp.token),
             URLQueryItem(name: "v", value: "5.103"),
         ]
         
@@ -98,16 +102,15 @@ class NetworkingService {
         
         var urlConstructor = URLComponents()
         
-        urlConstructor.scheme = "https"
-        
-        urlConstructor.host = "api.vk.com"
+        urlConstructor.scheme = appConfiguration.scheme
+        urlConstructor.host = appConfiguration.host
         
         urlConstructor.path = "/method/docs.delete"
         
         urlConstructor.queryItems = [
             URLQueryItem(name: "owner_id", value: "\(file.ownerID)"),
             URLQueryItem(name: "doc_id", value: "\(file.id)"),
-            URLQueryItem(name: "access_token", value: Session.shared.token),
+            URLQueryItem(name: "access_token", value: sessionApp.token),
             URLQueryItem(name: "v", value: "5.103"),
         ]
         
@@ -124,7 +127,7 @@ class NetworkingService {
         }
         task.resume()
     }
-    //Сделать с флагом вызывает юзер или проверка есть ли файл
+    
     func downloadFile(_ file: FileModel, isUserInitiated: Bool, completion: @escaping (_ success: Bool,_ filrLocation: URL?) -> Void){
         
         let fileURL = URL(string: file.url)

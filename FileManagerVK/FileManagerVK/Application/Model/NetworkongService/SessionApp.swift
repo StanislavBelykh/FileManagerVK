@@ -8,13 +8,9 @@
 
 import Foundation
 
-class Session {
+class SessionApp {
     
-    static var shared = Session()
-    var token: String?
+//    static var shared = SessionApp()
+    var token: String? = UserDefaults.standard.string(forKey: "token")
     var userID: Int?
-    
-    private init() {
-        
-    }
 }

@@ -1,14 +1,14 @@
 //
-//  HomeTableView.swift
+//  FileListView.swift
 //  FileManagerVK
 //
-//  Created by Станислав on 22.04.2020.
+//  Created by Полина on 13.08.2020.
 //  Copyright © 2020 Станислав. All rights reserved.
 //
 
 import UIKit
 
-class HomeTableView: UITableView {
+class FileListViewImpl: UITableView {
     let header = TableHeaderView(frame: .init(x: 0, y: 0, width: 0, height: 50))
     
     init(){
@@ -29,6 +29,4 @@ class HomeTableView: UITableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
-

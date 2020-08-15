@@ -1,18 +1,17 @@
 //
-//  AutorizationView.swift
+//  AuthtorizationView.swift
 //  FileManagerVK
 //
-//  Created by Станислав on 17.04.2020.
+//  Created by Полина on 13.08.2020.
 //  Copyright © 2020 Станислав. All rights reserved.
 //
 
 import UIKit
 
-class AutorizationView: UIView {
-    
+final class AuthtorizationViewImpl: UIView {
     weak var delegate: AutorizationViewDelegate?
     //MARK: - UI
-    let logoView: UIImageView = {
+    private let logoView: UIImageView = {
         let logoView = UIImageView()
         logoView.image = UIImage(named: "Logo")
         logoView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -22,7 +21,7 @@ class AutorizationView: UIView {
         return logoView
     }()
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         titleLabel.text = "File Manager VK"
@@ -31,7 +30,7 @@ class AutorizationView: UIView {
         return titleLabel
     }()
     
-    let loginButton: UIButton = {
+    private let loginButton: UIButton = {
         let loginButton = UIButton()
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -49,9 +48,20 @@ class AutorizationView: UIView {
     init() {
         super.init(frame: .zero)
         backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        
         addSubview(logoView)
         addSubview(titleLabel)
         addSubview(loginButton)
+        
+        setConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setConstraints() {
+        
         NSLayoutConstraint.activate([
             logoView.topAnchor.constraint(equalTo: topAnchor, constant: 150),
             logoView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -65,16 +75,6 @@ class AutorizationView: UIView {
             loginButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             loginButton.widthAnchor.constraint(equalToConstant: 200),
         ])
-    }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     //MARK: - Animation
@@ -90,8 +90,9 @@ class AutorizationView: UIView {
         })
     }
 }
-    //MARK: - Private Func
-private extension AutorizationView {
+
+    //MARK: - Private func
+private extension AuthtorizationViewImpl {
     @objc func moveToAuth(){
         delegate?.moveToRegistrationWebView()
     }
@@ -105,7 +106,6 @@ private extension AutorizationView {
     }
 }
 
-    //MARK: - Delegate
 protocol AutorizationViewDelegate: class {
     func moveToRegistrationWebView()
 }
