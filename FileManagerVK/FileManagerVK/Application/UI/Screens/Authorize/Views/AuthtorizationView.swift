@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class AuthtorizationViewImpl: UIView {
+final class AuthtorizationView: UIView {
     weak var delegate: AutorizationViewDelegate?
     //MARK: - UI
     private let logoView: UIImageView = {
@@ -94,7 +94,7 @@ final class AuthtorizationViewImpl: UIView {
 }
 
     //MARK: - Private func
-private extension AuthtorizationViewImpl {
+private extension AuthtorizationView {
     @objc func moveToAuth(){
         delegate?.moveToRegistrationWebView()
     }

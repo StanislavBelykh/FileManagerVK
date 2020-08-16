@@ -41,6 +41,7 @@
 		BF462A8324E5981100671BAE /* FileListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF462A8224E5981100671BAE /* FileListCoordinator.swift */; };
 		BF462A8524E5994600671BAE /* FileListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF462A8424E5994600671BAE /* FileListVC.swift */; };
 		BF462A8924E599AB00671BAE /* FileListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF462A8824E599AB00671BAE /* FileListView.swift */; };
+		BF504C3F24E9DF4900EAD4FA /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF504C3E24E9DF4900EAD4FA /* DateFormatter.swift */; };
 		BF9FCB5A24E7216A009315E2 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9FCB5924E7216A009315E2 /* Configuration.swift */; };
 		BF9FCB5C24E7245A009315E2 /* AuthConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9FCB5B24E7245A009315E2 /* AuthConfiguration.swift */; };
 /* End PBXBuildFile section */
@@ -84,6 +85,7 @@
 		BF462A8224E5981100671BAE /* FileListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListCoordinator.swift; sourceTree = "<group>"; };
 		BF462A8424E5994600671BAE /* FileListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListVC.swift; sourceTree = "<group>"; };
 		BF462A8824E599AB00671BAE /* FileListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListView.swift; sourceTree = "<group>"; };
+		BF504C3E24E9DF4900EAD4FA /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		BF9FCB5924E7216A009315E2 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		BF9FCB5B24E7245A009315E2 /* AuthConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthConfiguration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -157,16 +159,6 @@
 				8562C64124E891110004C598 /* Localizable.strings */,
 			);
 			path = Localizable;
-			sourceTree = "<group>";
-		};
-		85CB935F2458580C00A4E354 /* NetworkongService */ = {
-			isa = PBXGroup;
-			children = (
-				85CB935B245838FF00A4E354 /* SessionApp.swift */,
-				85CB935D24583BA200A4E354 /* Authorize.swift */,
-				85CB93602458583F00A4E354 /* NetworkingService.swift */,
-			);
-			path = NetworkongService;
 			sourceTree = "<group>";
 		};
 		85CB936224586CB200A4E354 /* Library */ = {
@@ -246,9 +238,10 @@
 		BF462A5524E5563200671BAE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BF504C3D24E9DF0A00EAD4FA /* Sevices */,
+				BF504C3C24E9DEC600EAD4FA /* DateFormatter */,
 				8562C63A24E88EE50004C598 /* SortManager */,
 				BF462A5724E5568700671BAE /* Entity */,
-				85CB935F2458580C00A4E354 /* NetworkongService */,
 				BF462A5624E5563B00671BAE /* AppDelegate */,
 			);
 			path = Model;
@@ -431,6 +424,24 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		BF504C3C24E9DEC600EAD4FA /* DateFormatter */ = {
+			isa = PBXGroup;
+			children = (
+				BF504C3E24E9DF4900EAD4FA /* DateFormatter.swift */,
+			);
+			path = DateFormatter;
+			sourceTree = "<group>";
+		};
+		BF504C3D24E9DF0A00EAD4FA /* Sevices */ = {
+			isa = PBXGroup;
+			children = (
+				85CB935B245838FF00A4E354 /* SessionApp.swift */,
+				85CB935D24583BA200A4E354 /* Authorize.swift */,
+				85CB93602458583F00A4E354 /* NetworkingService.swift */,
+			);
+			path = Sevices;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -527,6 +538,7 @@
 				859F43FF2450CED4008C1386 /* FileModel.swift in Sources */,
 				BF462A4A24E5539F00671BAE /* Coordinator.swift in Sources */,
 				85CB93672458707000A4E354 /* FilesResponse.swift in Sources */,
+				BF504C3F24E9DF4900EAD4FA /* DateFormatter.swift in Sources */,
 				8562C63924E884970004C598 /* ConstreintConstants.swift in Sources */,
 				BF462A7B24E583DF00671BAE /* AuthtorizationVC.swift in Sources */,
 				BF462A6724E559EE00671BAE /* SplashView.swift in Sources */,

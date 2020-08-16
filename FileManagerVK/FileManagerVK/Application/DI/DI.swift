@@ -58,7 +58,7 @@ extension Di: AppFactory {
 protocol ScreenFactory {
 
     func makeSplashScreen() -> SplashVC<SplashViewImpl>
-    func makeAuthtorizationScreen() -> AuthtorizationVC<AuthtorizationViewImpl>
+    func makeAuthtorizationScreen() -> AuthtorizationVC<AuthtorizationView>
     func makeWebAuthScreen() -> WebAuthVC<WKWebView>
     func makeFileListScreen() -> FileListVC<FileListViewImpl>
 }
@@ -72,8 +72,8 @@ final class ScreenFactoryImpl: ScreenFactory {
         return SplashVC<SplashViewImpl>(sessionApp: di.sessionApp)
     }
     
-    func makeAuthtorizationScreen() -> AuthtorizationVC<AuthtorizationViewImpl> {
-        return AuthtorizationVC<AuthtorizationViewImpl>()
+    func makeAuthtorizationScreen() -> AuthtorizationVC<AuthtorizationView> {
+        return AuthtorizationVC<AuthtorizationView>()
     }
     
     func makeWebAuthScreen() -> WebAuthVC<WKWebView> {

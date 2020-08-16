@@ -14,6 +14,7 @@ class  Authorize {
     init(authConfiguration: AuthConfiguration) {
         self.authConfiguration = authConfiguration
     }
+    
     func  getRequest() -> URLRequest? {
         var components = URLComponents()
         components.scheme = authConfiguration.scheme

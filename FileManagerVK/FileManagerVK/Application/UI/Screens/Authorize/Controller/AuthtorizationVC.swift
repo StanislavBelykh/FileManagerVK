@@ -10,7 +10,7 @@ import Foundation
 
 import UIKit
 
-final class AuthtorizationVC<View: AuthtorizationViewImpl>: BaseViewController<View>, AutorizationViewDelegate {
+final class AuthtorizationVC<View: AuthtorizationView>: BaseViewController<View>, AutorizationViewDelegate {
 
     var moveToAuthorize: VoidClosure?
     

@@ -11,11 +11,6 @@ import UIKit
 class FileTableViewCell: UITableViewCell {
     
     static let reusedID = "FileTableViewCell"
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateFormat = "dd.MM.yyyy HH.mm"
-        return df
-    }()
     
     weak var delegate: HomeTableViewCellDelegate?
     var index: Int?
@@ -73,15 +68,13 @@ class FileTableViewCell: UITableViewCell {
     }
     
     func configureCell(for file: FileModel){
-        let date = Date(timeIntervalSince1970: file.date)
-        let dateString = FileTableViewCell.dateFormatter.string(from: date)
         
         loadButton.addTarget(self, action: #selector(changeState), for: .touchDown)
         loadButton.addTarget(self, action: #selector(loadFile), for: .touchUpInside)
         
         self.imageFile.image = UIImage(named: "\(file.type.getIconName())")
         self.titleFileLabel.text = file.title
-        self.dateFileLabel.text = dateString
+        self.dateFileLabel.text = DateFormatterApp.shared.getFullDate(file.date)
         self.setImageLoadButton(for: file)
     }
     
@@ -175,6 +168,7 @@ class FileTableViewCell: UITableViewCell {
         }
     }
 }
+
 protocol HomeTableViewCellDelegate: class {
     func loadFile(indexCell: Int)
 }
