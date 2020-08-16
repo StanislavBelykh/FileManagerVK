@@ -27,7 +27,7 @@ final class SplashVC<View: SplashViewImpl>: BaseViewController<View> {
         super.viewDidLoad()
         
         if let lifeTimeToken = sessionApp.lifeTimeToken, lifeTimeToken > 600 {
-            isAuthorize?(false)
+            isAuthorize?(true)
         } else {
             isAuthorize?(false)
         }
