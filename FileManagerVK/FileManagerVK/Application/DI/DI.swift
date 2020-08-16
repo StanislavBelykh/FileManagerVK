@@ -16,6 +16,7 @@ final class Di {
     fileprivate let appConfiguration: Configuration
     fileprivate let networkingService: NetworkingService
     fileprivate let authService: Authorize
+    fileprivate let sortManager: SortManager
     fileprivate let screenFactory: ScreenFactoryImpl
     fileprivate let coordinatorFactory: CoordinatorFactoryImpl
     
@@ -24,6 +25,7 @@ final class Di {
         sessionApp = SessionApp()
         authConfiguration = AppAuthConfiguration()
         appConfiguration = AppConfiguration()
+        sortManager = SortManager()
         networkingService = NetworkingService(sessionApp: sessionApp, appConfiguration: appConfiguration)
         authService = Authorize(authConfiguration: authConfiguration)
         screenFactory = ScreenFactoryImpl()
@@ -79,7 +81,7 @@ final class ScreenFactoryImpl: ScreenFactory {
     }
     
     func makeFileListScreen() -> FileListVC<FileListViewImpl> {
-        return FileListVC<FileListViewImpl>(networkingService: di.networkingService)
+        return FileListVC<FileListViewImpl>(networkingService: di.networkingService, sortManager: di.sortManager)
     }
 }
 

@@ -1,0 +1,33 @@
+/* 
+  Localizable.strings
+  FileManagerVK
+
+  Created by Станислав Белых on 16.08.2020.
+  Copyright © 2020 Станислав. All rights reserved.
+*/
+
+//MARK: - General
+"Exchange" = "Exchange";
+"Cancel" = "Cancel";
+"Accept" = "Accept";
+"Delete" = "Delete";
+"Search" = "Search";
+"OK" = "OK";
+"Name" = "Name";
+"Date" = "Date";
+"Type" = "Type";
+
+"Want to delete" = "Want to delete ";
+"Enter new name to file" = "Enter new name to file ";
+"Sorted by:" = "Sorted by: ";
+
+//MARK: - AuthtorizationViewImpl
+"AuthtorizationViewImpl.titleLabel" = "File Manager VK";
+"AuthtorizationViewImpl.titleLabel.toggle" = "Your files VK";
+"AuthtorizationViewImpl.loginButton" = "Authtorization";
+
+//MARK: - Files Screen
+"TableHeaderView.sortButton.name" = "Sorted by name";
+"TableHeaderView.sortButton.date" = "Sorted by date";
+"TableHeaderView.sortButton.type" = "Sorted by type";
+

@@ -13,8 +13,8 @@ class FileListViewImpl: UITableView {
     
     init(){
         super.init(frame: .zero, style: .grouped)
-        backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        separatorColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+        backgroundColor = GeneralColor.backgroundColor.uiColor()
+        separatorColor = GeneralColor.subtitleTaxtColor.uiColor()
         
         //Cell
         register(FileTableViewCell.self, forCellReuseIdentifier: FileTableViewCell.reusedID)
@@ -24,7 +24,7 @@ class FileListViewImpl: UITableView {
         //Header
         tableHeaderView?.isHidden = false
         tableHeaderView = header
-        tableHeaderView?.backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
+        tableHeaderView?.backgroundColor = GeneralColor.backgroundElementColor.uiColor()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

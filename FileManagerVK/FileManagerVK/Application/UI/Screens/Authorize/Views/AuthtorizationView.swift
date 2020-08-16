@@ -14,7 +14,7 @@ final class AuthtorizationViewImpl: UIView {
     private let logoView: UIImageView = {
         let logoView = UIImageView()
         logoView.image = UIImage(named: "Logo")
-        logoView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        logoView.backgroundColor = .clear
         logoView.layer.cornerRadius = 8
         logoView.clipsToBounds = true
         logoView.translatesAutoresizingMaskIntoConstraints = false
@@ -23,8 +23,8 @@ final class AuthtorizationViewImpl: UIView {
     
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        titleLabel.text = "File Manager VK"
+        titleLabel.textColor = GeneralColor.textColor.uiColor()
+        titleLabel.text = NSLocalizedString("AuthtorizationViewImpl.titleLabel", comment: "Toggle lable authorization screen")
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         return titleLabel
@@ -33,12 +33,13 @@ final class AuthtorizationViewImpl: UIView {
     private let loginButton: UIButton = {
         let loginButton = UIButton()
         loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        loginButton.setTitle("Авторизоваться", for: .normal)
-        loginButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .highlighted)
+        loginButton.tintColor = GeneralColor.textColor.uiColor()
+        loginButton.setTitle(NSLocalizedString("AuthtorizationViewImpl.loginButton", comment: "authorization button"), for: .normal)
+        loginButton.setTitleColor(GeneralColor.textColor.uiColor(), for: .normal)
+        loginButton.setTitleColor(GeneralColor.subtitleTaxtColor.uiColor(), for: .highlighted)
         loginButton.addTarget(self, action: #selector(moveToAuth), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(touchLoginButton), for: .touchDown)
-        loginButton.backgroundColor = #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1)
+        loginButton.backgroundColor = GeneralColor.buttonColor.uiColor()
         loginButton.layer.cornerRadius = 4
         loginButton.clipsToBounds = true
         return loginButton
@@ -47,7 +48,7 @@ final class AuthtorizationViewImpl: UIView {
     //MARK: - LiveCycle
     init() {
         super.init(frame: .zero)
-        backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        backgroundColor = GeneralColor.backgroundColor.uiColor()
         
         addSubview(logoView)
         addSubview(titleLabel)
@@ -70,6 +71,7 @@ final class AuthtorizationViewImpl: UIView {
             
             titleLabel.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 20),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            titleLabel.widthAnchor.constraint(equalToConstant: 200),
             
             loginButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             loginButton.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -84,9 +86,9 @@ final class AuthtorizationViewImpl: UIView {
                           duration: 2,
                           options: [.repeat, .autoreverse, .transitionFlipFromTop],
                           animations: {
-                            self.titleLabel.text = "Файловый менеджер"
+                            self.titleLabel.text = NSLocalizedString("AuthtorizationViewImpl.titleLabel.toggle", comment: "Toggle lable authorization screen")
         }, completion: { _ in
-            self.titleLabel.text = "File Manager VK"
+            self.titleLabel.text = NSLocalizedString("AuthtorizationViewImpl.titleLabel", comment: "Toggle lable authorization screen")
         })
     }
 }

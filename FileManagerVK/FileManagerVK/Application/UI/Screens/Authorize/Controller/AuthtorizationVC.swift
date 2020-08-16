@@ -19,9 +19,9 @@ final class AuthtorizationVC<View: AuthtorizationViewImpl>: BaseViewController<V
         rootView.delegate = self
         
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         rootView.animateTitleLabel()
     }
     

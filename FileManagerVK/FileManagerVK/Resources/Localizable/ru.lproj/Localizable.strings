@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  FileManagerVK
+
+  Created by Станислав Белых on 16.08.2020.
+  Copyright © 2020 Станислав. All rights reserved.
+*/
+
+//MARK: - General
+"Exchange" = "Изменить";
+"Cancel" = "Отмена";
+"Accept" = "Принять";
+"Delete" = "Удалить";
+"Search" = "Поиск";
+"OK" = "OK";
+"Name" = "Имя";
+"Date" = "Дата";
+"Type" = "Тип";
+
+"Want to delete" = "Хотите удалить ";
+"Enter new name to file" = "Введите новое имя файла ";
+"Sorted by:" = "Сортировать по: ";
+
+//MARK: - AuthtorizationViewImpl
+"AuthtorizationViewImpl.titleLabel" = "Файловый менеджер";
+"AuthtorizationViewImpl.titleLabel.toggle" = "Ваши файлы ВК";
+"AuthtorizationViewImpl.loginButton" = "Авторизоваться";
+
+//MARK: - Files Screen
+"TableHeaderView.sortButton.name" = "Сортировка по имени";
+"TableHeaderView.sortButton.date" = "Сортировка по дате";
+"TableHeaderView.sortButton.type" = "Сортировка по типу";
+
+

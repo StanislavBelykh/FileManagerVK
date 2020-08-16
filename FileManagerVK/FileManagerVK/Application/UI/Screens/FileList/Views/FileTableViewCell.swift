@@ -20,40 +20,43 @@ class FileTableViewCell: UITableViewCell {
     weak var delegate: HomeTableViewCellDelegate?
     var index: Int?
     
-    let imageFile: UIImageView = {
+    private let imageFile: UIImageView = {
         let imageFile = UIImageView()
         imageFile.translatesAutoresizingMaskIntoConstraints = false
-        imageFile.layer.cornerRadius = 5
+        imageFile.layer.cornerRadius = ConstreintConstant.cornerRadiusMidImage
         imageFile.clipsToBounds = true
         return imageFile
     }()
-    let titleFileLabel: UILabel = {
+    
+    private let titleFileLabel: UILabel = {
         let titleFile = UILabel()
         titleFile.translatesAutoresizingMaskIntoConstraints = false
-        titleFile.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        titleFile.textColor = GeneralColor.textColor.uiColor()
         titleFile.lineBreakMode = .byTruncatingMiddle
         titleFile.font = .boldSystemFont(ofSize: 20)
         return titleFile
     }()
-    let dateFileLabel: UILabel = {
+    
+    private let dateFileLabel: UILabel = {
         let dateFile = UILabel()
         dateFile.translatesAutoresizingMaskIntoConstraints = false
         dateFile.font = .systemFont(ofSize: 14)
-        dateFile.textColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+        dateFile.textColor = GeneralColor.subtitleTaxtColor.uiColor()
         return dateFile
     }()
-    let loadButton: UIButton = {
+    
+    private let loadButton: UIButton = {
         let loadButton = UIButton()
         loadButton.translatesAutoresizingMaskIntoConstraints = false
-        loadButton.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        loadButton.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        loadButton.backgroundColor = .clear
+        loadButton.tintColor = GeneralColor.buttonColor.uiColor()
         return loadButton
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: FileTableViewCell.reusedID)
         
-        backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        backgroundColor = GeneralColor.backgroundColor.uiColor()
         selectionStyle = .none
         isUserInteractionEnabled = true
         
@@ -62,27 +65,7 @@ class FileTableViewCell: UITableViewCell {
         addSubview(dateFileLabel)
         addSubview(loadButton)
         
-        NSLayoutConstraint.activate([
-            
-            imageFile.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            imageFile.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-            imageFile.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            imageFile.widthAnchor.constraint(equalToConstant: 40),
-            imageFile.heightAnchor.constraint(equalToConstant: 40),
-            
-            titleFileLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            titleFileLabel.leadingAnchor.constraint(equalTo: imageFile.trailingAnchor, constant: 20),
-            titleFileLabel.trailingAnchor.constraint(equalTo: loadButton.leadingAnchor, constant: -20),
-            
-            dateFileLabel.topAnchor.constraint(equalTo: titleFileLabel.bottomAnchor, constant: 4),
-            dateFileLabel.leadingAnchor.constraint(equalTo: imageFile.trailingAnchor, constant: 20),
-            dateFileLabel.trailingAnchor.constraint(equalTo: loadButton.leadingAnchor, constant: -20),
-            
-            loadButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            loadButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            loadButton.widthAnchor.constraint(equalToConstant: 20),
-            loadButton.heightAnchor.constraint(equalToConstant: 20),      
-        ])
+        setConstreints()
     }
     
     required init?(coder: NSCoder) {
@@ -96,66 +79,95 @@ class FileTableViewCell: UITableViewCell {
         loadButton.addTarget(self, action: #selector(changeState), for: .touchDown)
         loadButton.addTarget(self, action: #selector(loadFile), for: .touchUpInside)
         
-        
         self.imageFile.image = UIImage(named: "\(file.type.getIconName())")
         self.titleFileLabel.text = file.title
         self.dateFileLabel.text = dateString
         self.setImageLoadButton(for: file)
-        
     }
     
-    @objc func loadFile() {
+    @objc private func loadFile() {
         if let index = index {
             delegate?.loadFile(indexCell: index)
         } else {
             print("File  не доступен")
         }
     }
-    @objc func changeState(){
+    
+    @objc private func changeState(){
         UIView.animate(withDuration: 0.4, animations: {
             self.loadButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-            self.loadButton.tintColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+            self.loadButton.tintColor = GeneralColor.buttonColor.uiColor()
         }) { _ in
             self.loadButton.transform = .identity
         }
     }
+    
+    private func setConstreints() {
+        NSLayoutConstraint.activate([
+            
+            imageFile.topAnchor.constraint(equalTo: topAnchor, constant: ConstreintConstant.paddingMinimal),
+            imageFile.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ConstreintConstant.paddingMinimal),
+            imageFile.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ConstreintConstant.padding),
+            imageFile.widthAnchor.constraint(equalToConstant: ConstreintConstant.widthMidImage),
+            imageFile.heightAnchor.constraint(equalToConstant: ConstreintConstant.heightMidImage),
+            
+            titleFileLabel.topAnchor.constraint(equalTo: topAnchor, constant: ConstreintConstant.paddingMinimal),
+            titleFileLabel.leadingAnchor.constraint(equalTo: imageFile.trailingAnchor, constant: ConstreintConstant.padding),
+            titleFileLabel.trailingAnchor.constraint(equalTo: loadButton.leadingAnchor, constant: -ConstreintConstant.padding),
+            
+            dateFileLabel.topAnchor.constraint(equalTo: titleFileLabel.bottomAnchor, constant: ConstreintConstant.paddingMinimal),
+            dateFileLabel.leadingAnchor.constraint(equalTo: imageFile.trailingAnchor, constant: ConstreintConstant.padding),
+            dateFileLabel.trailingAnchor.constraint(equalTo: loadButton.leadingAnchor, constant: -ConstreintConstant.padding),
+            
+            loadButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            loadButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ConstreintConstant.padding),
+            loadButton.widthAnchor.constraint(equalToConstant: ConstreintConstant.widthSmallButton),
+            loadButton.heightAnchor.constraint(equalToConstant: ConstreintConstant.heightSmallButton),
+        ])
+    }
+    
     func setImageLoadButton(for file: FileModel){
         DispatchQueue.main.async {
             switch file.state {
             case .inCloud:
                 if #available(iOS 13.0, *) {
+                    self.loadButton.tintColor = GeneralColor.buttonColor.uiColor()
                     self.loadButton.setImage(UIImage(systemName: "capslock.fill"), for: .normal)
                 } else {
-                    self.loadButton.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-                    self.loadButton.layer.cornerRadius = 10
+                    self.loadButton.backgroundColor = GeneralColor.buttonColor.uiColor()
+                    self.loadButton.layer.cornerRadius = ConstreintConstant.cornerRadiusSmallButton
                     self.loadButton.layer.masksToBounds = true
                     // Fallback on earlier versions
                 }
+                
             case .loading:
-                self.loadButton.tintColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+                self.loadButton.tintColor = GeneralColor.buttonColor.uiColor()
                 UIView.transition(
                     with: self.loadButton,
                     duration: 0.6,
                     options: [.repeat, .transitionFlipFromLeft],
                     animations: nil,
                     completion: nil)
+                
             case .loaded:
-                self.loadButton.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                self.loadButton.tintColor = GeneralColor.activeTextColor.uiColor()
                 self.loadButton.layer.removeAllAnimations()
                 if #available(iOS 13.0, *) {
                     self.loadButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
                 } else {
-                    self.loadButton.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-                    self.loadButton.layer.cornerRadius = 10
+                    self.loadButton.backgroundColor = GeneralColor.activeTextColor.uiColor()
+                    self.loadButton.layer.cornerRadius = ConstreintConstant.cornerRadiusSmallButton
                     self.loadButton.layer.masksToBounds = true
                     // Fallback on earlier versions
                 }
+                
             default:
                 if #available(iOS 13.0, *) {
+                    self.loadButton.tintColor = GeneralColor.buttonColor.uiColor()
                     self.loadButton.setImage(UIImage(systemName: "capslock.fill"), for: .normal)
                 } else {
-                    self.loadButton.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-                    self.loadButton.layer.cornerRadius = 10
+                    self.loadButton.backgroundColor = GeneralColor.buttonColor.uiColor()
+                    self.loadButton.layer.cornerRadius = ConstreintConstant.cornerRadiusSmallButton
                     self.loadButton.layer.masksToBounds = true
                     // Fallback on earlier versions
                 }

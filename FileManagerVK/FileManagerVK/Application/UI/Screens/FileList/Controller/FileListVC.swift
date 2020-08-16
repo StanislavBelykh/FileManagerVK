@@ -14,7 +14,7 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
     private var loadFiles = [FileModel]()
     private var files = [FileModel]()
     private let networkingService: NetworkingService
-    private let sortManager = SortManager()
+    private let sortManager: SortManager
     private var sortBy: TypeSorted = .name
     
     private let searchController = UISearchController(searchResultsController: nil)
@@ -25,8 +25,9 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
         return text.isEmpty
     }
     
-    init(networkingService: NetworkingService) {
+    init(networkingService: NetworkingService, sortManager: SortManager) {
         self.networkingService = networkingService
+        self.sortManager = sortManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -36,7 +37,7 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isHidden = false
+        
         title = "Files"
         
         loadData()
@@ -50,7 +51,7 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
     private func setSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Поиск"
+        searchController.searchBar.placeholder = NSLocalizedString("Search", comment: "Searchbar placeholder")
         searchController.searchBar.isHidden = false
         
         navigationItem.searchController = searchController
@@ -72,26 +73,40 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
             self?.loadFiles = self?.sortManager.sortedFor(files: self?.loadFiles, by: .name) ?? [FileModel]()
             self?.files = self?.loadFiles ?? [FileModel]()
             self?.rootView.reloadData()
-        }) { (error) in
+        }, onError: { (error) in
             print(error)
-        }
+        })
     }
+    
     func edit(file: FileModel){
-        let alert = UIAlertController(title: "Изменить", message: "Введите новое имя файла", preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: NSLocalizedString("Exchange", comment: "Exchange"),
+            message: NSLocalizedString("Enter new name to file", comment: "Enter new name to file Alert massage"),
+            preferredStyle: .alert
+        )
+        
         alert.addTextField { (textField) in
             textField.text = "\(file.title)"
         }
-        let cancel = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        
+        let cancel = UIAlertAction(
+            title: NSLocalizedString("Cancel", comment: "Cancel"),
+            style: .cancel,
+            handler: nil
+        )
         alert.addAction(cancel)
         
-        let ok = UIAlertAction(title: "Подтвердить", style: .default, handler: { [weak alert] (_) in
-            let textField = alert?.textFields?[0]
-            guard let newName = textField?.text else {return}
-            self.networkingService.editFile(id: file.id, newName: newName, onComplete: { [weak self] in
-                self?.loadData()
-            }) { (error) in
-                print(error)
-            }
+        let ok = UIAlertAction(
+            title: NSLocalizedString("Accept", comment: "Accept"),
+            style: .default,
+            handler: { [weak alert] (_) in
+                let textField = alert?.textFields?[0]
+                guard let newName = textField?.text else {return}
+                self.networkingService.editFile(id: file.id, newName: newName, onComplete: { [weak self] in
+                    self?.loadData()
+                }) { (error) in
+                    print(error)
+                }
         })
         alert.addAction(ok)
         
@@ -99,18 +114,27 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
     }
     
     func delete(file: FileModel, indexPath: IndexPath){
-        let alert = UIAlertController(title: "Удаление", message: "Удалить \(file.title)?", preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: NSLocalizedString("Delete", comment: "Delete title Allert"),
+            message: NSLocalizedString("Want to delete", comment: "Want to delete? Allert") + "\(file.title)?",
+            preferredStyle: .alert
+        )
         
-        let cancel = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        let cancel = UIAlertAction(
+            title: NSLocalizedString("Cancel", comment: "Cancel title Allert"),
+            style: .cancel, handler: nil)
         alert.addAction(cancel)
         
-        let ok = UIAlertAction(title: "Да", style: .default, handler: { (_) in
-            self.networkingService.deleteFile(file: file, onComplete: { [weak self] in
-                self?.files.remove(at: indexPath.row)
-                self?.rootView.deleteRows(at: [indexPath], with: .automatic)
-            }) { (error) in
-                print(error)
-            }
+        let ok = UIAlertAction(
+            title: NSLocalizedString("OK", comment: "OK - accept"),
+            style: .default,
+            handler: { (_) in
+                self.networkingService.deleteFile(file: file, onComplete: { [weak self] in
+                    self?.files.remove(at: indexPath.row)
+                    self?.rootView.deleteRows(at: [indexPath], with: .automatic)
+                }) { (error) in
+                    print(error)
+                }
         })
         alert.addAction(ok)
         
@@ -207,48 +231,80 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
     
     // MARK: - HomeTableViewCellDelegate
     func loadFile(indexCell: Int) {
-        print("Нажата кнопка загрузки")
         let cell = rootView.cellForRow(at: IndexPath(row: indexCell, section: 0)) as! FileTableViewCell
         
         files[indexCell].state = .loading
         cell.setImageLoadButton(for: files[indexCell])
        
         self.networkingService.downloadFile(files[indexCell], isUserInitiated: true) { (isComplete, destinationURL) in
-            if isComplete {
-                guard destinationURL != nil else {
-                    return
-                }
-                self.files[indexCell].destinationURL = destinationURL
-                self.files[indexCell].state = .loaded
-                cell.setImageLoadButton(for: self.files[indexCell])
+            guard isComplete, destinationURL != nil else {
+                return
             }
+            
+            self.files[indexCell].destinationURL = destinationURL
+            self.files[indexCell].state = .loaded
+            cell.setImageLoadButton(for: self.files[indexCell])
         }
     }
     
     // MARK: - HeaderControlsDelegate
     func selectSort() {
-        let sortAlert = UIAlertController(title: "Сортировка по:", message: nil, preferredStyle: .actionSheet)
-        let cancel = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        let sortAlert = UIAlertController(
+            title: NSLocalizedString("Sorted by:", comment: "Sorted by: - alert title"),
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        
+        let cancel = UIAlertAction(
+            title: NSLocalizedString("Cancel", comment: "Cancel"),
+            style: .cancel,
+            handler: nil
+        )
+        
         sortAlert.addAction(cancel)
         
-        sortAlert.addAction(UIAlertAction(title: "Имя", style: .default, handler: { _ in
-            self.rootView.header.sortButton.setTitle("Сортировка по имени", for: .normal)
-            self.files = self.sortManager.sortedFor(files: self.files, by: .name) ?? [FileModel]()
-            self.loadFiles = self.sortManager.sortedFor(files: self.loadFiles, by: .name) ?? [FileModel]()
-            self.rootView.reloadData()
+        sortAlert.addAction(UIAlertAction(
+            title: NSLocalizedString("Name", comment: "Name"),
+            style: .default,
+            handler: { _ in
+                self.rootView.header.sortButton.setTitle(
+                    NSLocalizedString("TableHeaderView.sortButton.name", comment: "Table title sorted by name"),
+                    for: .normal
+                )
+                
+                self.files = self.sortManager.sortedFor(files: self.files, by: .name) ?? [FileModel]()
+                self.loadFiles = self.sortManager.sortedFor(files: self.loadFiles, by: .name) ?? [FileModel]()
+                self.rootView.reloadData()
         }))
-        sortAlert.addAction(UIAlertAction(title: "Дата", style: .default, handler: { _ in
-            self.rootView.header.sortButton.setTitle("Сортировка по дате", for: .normal)
-            self.files = self.sortManager.sortedFor(files: self.files, by: .date) ?? [FileModel]()
-            self.loadFiles = self.sortManager.sortedFor(files: self.loadFiles, by: .date) ?? [FileModel]()
-            self.rootView.reloadData()
+        
+        sortAlert.addAction(UIAlertAction(
+            title: NSLocalizedString("Date", comment: "Date alert button"),
+            style: .default,
+            handler: { _ in
+                self.rootView.header.sortButton.setTitle(
+                    NSLocalizedString("TableHeaderView.sortButton.date", comment: "Table title sorted by date"),
+                    for: .normal
+                )
+                
+                self.files = self.sortManager.sortedFor(files: self.files, by: .date) ?? [FileModel]()
+                self.loadFiles = self.sortManager.sortedFor(files: self.loadFiles, by: .date) ?? [FileModel]()
+                self.rootView.reloadData()
         }))
-        sortAlert.addAction(UIAlertAction(title: "Тип", style: .default, handler: { _ in
-            self.rootView.header.sortButton.setTitle("Сортировка по типу", for: .normal)
-            self.files = self.sortManager.sortedFor(files: self.files, by: .type) ?? [FileModel]()
-            self.loadFiles = self.sortManager.sortedFor(files: self.loadFiles, by: .type) ?? [FileModel]()
-            self.rootView.reloadData()
+        
+        sortAlert.addAction(UIAlertAction(
+            title: NSLocalizedString("Type", comment: "Type alert button"),
+            style: .default,
+            handler: { [weak self] _ in
+                self?.rootView.header.sortButton.setTitle(
+                    NSLocalizedString("TableHeaderView.sortButton.type", comment: "Table title sorted by type"),
+                    for: .normal
+                )
+                
+                self?.files = self?.sortManager.sortedFor(files: self?.files, by: .type) ?? [FileModel]()
+                self?.loadFiles = self?.sortManager.sortedFor(files: self?.loadFiles, by: .type) ?? [FileModel]()
+                self?.rootView.reloadData()
         }))
+        
         sortAlert.pruneNegativeWidthConstraints()
         
         self.present(sortAlert, animated: true, completion: nil)

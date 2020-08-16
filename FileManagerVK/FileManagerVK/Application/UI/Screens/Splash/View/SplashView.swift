@@ -24,7 +24,7 @@ final class SplashViewImpl: UIView, SplashView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = GeneralColor.backgroundColor.uiColor()
         
         addSubview(imageView)
         setConstraints()

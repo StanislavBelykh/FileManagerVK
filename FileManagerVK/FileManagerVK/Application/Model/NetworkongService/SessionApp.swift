@@ -12,5 +12,6 @@ class SessionApp {
     
 //    static var shared = SessionApp()
     var token: String? = UserDefaults.standard.string(forKey: "token")
+    var lifeTimeToken: Int? = UserDefaults.standard.integer(forKey: "lifeTimeToken")
     var userID: Int?
 }

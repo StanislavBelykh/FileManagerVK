@@ -58,8 +58,15 @@ final class WebAuthVC<View: WKWebView>: BaseViewController<View>, WKNavigationDe
         }
         
         guard let token = params["access_token"] else { return }
+        print(params)
         sessionApp.token = token
         UserDefaults.standard.setValue(token, forKey: "token")
+        
+        guard  let lifeTimeToken = params["expires_in"] else { return }
+        sessionApp.lifeTimeToken = Int(lifeTimeToken)
+        UserDefaults.standard.setValue(lifeTimeToken, forKey: "lifeTimeToken")
+        
+        
         
         tokenReceived?()
         

@@ -26,10 +26,10 @@ final class SplashVC<View: SplashViewImpl>: BaseViewController<View> {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if sessionApp.token == nil {
+        if let lifeTimeToken = sessionApp.lifeTimeToken, lifeTimeToken > 600 {
             isAuthorize?(false)
         } else {
-            isAuthorize?(true)
+            isAuthorize?(false)
         }
     }
 }
