@@ -14,6 +14,8 @@
 		8562C63524E82EC30004C598 /* GeneralColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8562C63424E82EC30004C598 /* GeneralColor.swift */; };
 		8562C63924E884970004C598 /* ConstreintConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8562C63824E884970004C598 /* ConstreintConstants.swift */; };
 		8562C63F24E891110004C598 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8562C64124E891110004C598 /* Localizable.strings */; };
+		856CCE8B2552D7360094F542 /* FileViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856CCE8A2552D7360094F542 /* FileViewModelFactory.swift */; };
+		856CCE8F2552D7A30094F542 /* FileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856CCE8E2552D7A20094F542 /* FileViewModel.swift */; };
 		85721AB42461B72100E78265 /* SortManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85721AB32461B72100E78265 /* SortManager.swift */; };
 		859F43FF2450CED4008C1386 /* FileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859F43FE2450CED4008C1386 /* FileModel.swift */; };
 		85CB935C245838FF00A4E354 /* SessionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CB935B245838FF00A4E354 /* SessionApp.swift */; };
@@ -57,6 +59,8 @@
 		8562C63B24E8903C0004C598 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		8562C64024E891110004C598 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8562C64224E891170004C598 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		856CCE8A2552D7360094F542 /* FileViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileViewModelFactory.swift; sourceTree = "<group>"; };
+		856CCE8E2552D7A20094F542 /* FileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileViewModel.swift; sourceTree = "<group>"; };
 		85721AB32461B72100E78265 /* SortManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortManager.swift; sourceTree = "<group>"; };
 		859F43FE2450CED4008C1386 /* FileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileModel.swift; sourceTree = "<group>"; };
 		85CB935B245838FF00A4E354 /* SessionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionApp.swift; sourceTree = "<group>"; };
@@ -159,6 +163,14 @@
 			path = Localizable;
 			sourceTree = "<group>";
 		};
+		856CCE892552D70C0094F542 /* Factory */ = {
+			isa = PBXGroup;
+			children = (
+				856CCE8A2552D7360094F542 /* FileViewModelFactory.swift */,
+			);
+			path = Factory;
+			sourceTree = "<group>";
+		};
 		85CB935F2458580C00A4E354 /* NetworkongService */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +258,7 @@
 		BF462A5524E5563200671BAE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				856CCE892552D70C0094F542 /* Factory */,
 				8562C63A24E88EE50004C598 /* SortManager */,
 				BF462A5724E5568700671BAE /* Entity */,
 				85CB935F2458580C00A4E354 /* NetworkongService */,
@@ -266,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				BF462A5824E556CD00671BAE /* File */,
+				856CCE8E2552D7A20094F542 /* FileViewModel.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -458,7 +472,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1140;
-				LastUpgradeCheck = 1140;
+				LastUpgradeCheck = 1210;
 				ORGANIZATIONNAME = "Станислав";
 				TargetAttributes = {
 					8502828424463AC00045F0AC = {
@@ -504,6 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				85CB935C245838FF00A4E354 /* SessionApp.swift in Sources */,
+				856CCE8F2552D7A30094F542 /* FileViewModel.swift in Sources */,
 				BF462A8524E5994600671BAE /* FileListVC.swift in Sources */,
 				85F160A72451C67500897790 /* TableHeaderView.swift in Sources */,
 				85CB93612458583F00A4E354 /* NetworkingService.swift in Sources */,
@@ -532,6 +547,7 @@
 				BF462A6724E559EE00671BAE /* SplashView.swift in Sources */,
 				8502828924463AC00045F0AC /* AppDelegate.swift in Sources */,
 				85CB935E24583BA200A4E354 /* Authorize.swift in Sources */,
+				856CCE8B2552D7360094F542 /* FileViewModelFactory.swift in Sources */,
 				85CB936B2459835600A4E354 /* SizesPreview.swift in Sources */,
 				BF462A8124E58EF500671BAE /* WebAuthVC.swift in Sources */,
 				BF462A7424E5621400671BAE /* Types.swift in Sources */,
@@ -590,6 +606,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -651,6 +668,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -686,7 +704,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8U33MU82AP;
 				INFOPLIST_FILE = FileManagerVK/Configuration/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -705,7 +723,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8U33MU82AP;
 				INFOPLIST_FILE = FileManagerVK/Configuration/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

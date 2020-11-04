@@ -11,11 +11,6 @@ import UIKit
 class FileTableViewCell: UITableViewCell {
     
     static let reusedID = "FileTableViewCell"
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateFormat = "dd.MM.yyyy HH.mm"
-        return df
-    }()
     
     weak var delegate: HomeTableViewCellDelegate?
     var index: Int?
@@ -72,17 +67,14 @@ class FileTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureCell(for file: FileModel){
-        let date = Date(timeIntervalSince1970: file.date)
-        let dateString = FileTableViewCell.dateFormatter.string(from: date)
-        
+    func configureCell(for file: FileViewModel){
+        self.imageFile.image = file.image
+        self.titleFileLabel.text = file.title
+        self.dateFileLabel.text = file.date
+        self.setImageLoadButton(for: file.statusLoad)
         loadButton.addTarget(self, action: #selector(changeState), for: .touchDown)
         loadButton.addTarget(self, action: #selector(loadFile), for: .touchUpInside)
         
-        self.imageFile.image = UIImage(named: "\(file.type.getIconName())")
-        self.titleFileLabel.text = file.title
-        self.dateFileLabel.text = dateString
-        self.setImageLoadButton(for: file)
     }
     
     @objc private func loadFile() {
@@ -126,9 +118,9 @@ class FileTableViewCell: UITableViewCell {
         ])
     }
     
-    func setImageLoadButton(for file: FileModel){
+    func setImageLoadButton(for state: StateFile?){
         DispatchQueue.main.async {
-            switch file.state {
+            switch state {
             case .inCloud:
                 if #available(iOS 13.0, *) {
                     self.loadButton.tintColor = GeneralColor.buttonColor.uiColor()
@@ -175,6 +167,6 @@ class FileTableViewCell: UITableViewCell {
         }
     }
 }
-protocol HomeTableViewCellDelegate: class {
+protocol HomeTableViewCellDelegate: AnyObject {
     func loadFile(indexCell: Int)
 }

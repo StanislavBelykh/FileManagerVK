@@ -13,7 +13,9 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
     
     private var loadFiles = [FileModel]()
     private var files = [FileModel]()
+    private var fileViewModels = [FileViewModel]()
     private let networkingService: NetworkingService
+    private let factoryViewModels = FileViewModelFactory()
     private let sortManager: SortManager
     private var sortBy: TypeSorted = .name
     
@@ -70,9 +72,11 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
                     }
                 })
             }
-            self?.loadFiles = self?.sortManager.sortedFor(files: self?.loadFiles, by: .name) ?? [FileModel]()
-            self?.files = self?.loadFiles ?? [FileModel]()
-            self?.rootView.reloadData()
+            guard let self = self else { return }
+            self.loadFiles = self.sortManager.sortedFor(files: self.loadFiles, by: .name) ?? [FileModel]()
+            self.files = self.loadFiles
+            self.fileViewModels = self.factoryViewModels.constructViewModels(from: self.files)
+            self.rootView.reloadData()
         }, onError: { (error) in
             print(error)
         })
@@ -164,6 +168,7 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
         }
         return action
     }
+    
     func editAction(at indexPath: IndexPath) -> UIContextualAction{
         let action = UIContextualAction(style: .normal, title: "Edit") { (action, view, completion) in
             let file = self.files[indexPath.row]
@@ -200,7 +205,7 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = rootView.dequeueReusableCell(withIdentifier: FileTableViewCell.reusedID, for: indexPath) as! FileTableViewCell
-        let file = files[indexPath.row]
+        let file = fileViewModels[indexPath.row]
         cell.index = indexPath.row
         cell.delegate = self
         cell.configureCell(for: file)
@@ -234,7 +239,7 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
         let cell = rootView.cellForRow(at: IndexPath(row: indexCell, section: 0)) as! FileTableViewCell
         
         files[indexCell].state = .loading
-        cell.setImageLoadButton(for: files[indexCell])
+        cell.setImageLoadButton(for: files[indexCell].state)
        
         self.networkingService.downloadFile(files[indexCell], isUserInitiated: true) { (isComplete, destinationURL) in
             guard isComplete, destinationURL != nil else {
@@ -243,7 +248,7 @@ final class FileListVC<View: FileListViewImpl>: BaseViewController<View>, QLPrev
             
             self.files[indexCell].destinationURL = destinationURL
             self.files[indexCell].state = .loaded
-            cell.setImageLoadButton(for: self.files[indexCell])
+            cell.setImageLoadButton(for: self.files[indexCell].state)
         }
     }
     

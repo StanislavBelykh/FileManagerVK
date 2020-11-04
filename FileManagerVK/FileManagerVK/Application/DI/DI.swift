@@ -54,7 +54,7 @@ extension Di: AppFactory {
     }
     
 }
-
+//MARK: - Screen Factory
 protocol ScreenFactory {
 
     func makeSplashScreen() -> SplashVC<SplashViewImpl>
@@ -84,7 +84,7 @@ final class ScreenFactoryImpl: ScreenFactory {
         return FileListVC<FileListViewImpl>(networkingService: di.networkingService, sortManager: di.sortManager)
     }
 }
-
+//MARK: - Coordinator Factory
 protocol CoordinatorFactory {
     
     func makeApplicationCoordinator(router: Router) -> ApplicationCoordinator

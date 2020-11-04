@@ -136,10 +136,10 @@ class NetworkingService {
         
         let destinationURL = documentDirectoryURL.appendingPathComponent("\(file.id)" + "." + "\(file.ext)" )
         
-        if FileManager.default.fileExists(atPath: destinationURL.path){
+        if FileManager.default.fileExists(atPath: destinationURL.path) {
                 debugPrint("Файл уже был загружен")
                 completion(true, destinationURL) 
-        } else if isUserInitiated{
+        } else if isUserInitiated {
             URLSession.shared.downloadTask(with: fileURL!, completionHandler: { (location, response, error) -> Void in
                 guard let tempLocation = location, error == nil else { return }
                 do {
